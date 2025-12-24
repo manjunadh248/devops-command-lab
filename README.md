@@ -2,7 +2,7 @@
 
 An interactive learning platform for mastering DevOps tools through hands-on practice.
 
-## Features feature version
+## Features feature version1
 
 - ✅ 5+ DevOps tools (Linux, Git)
 - 📚 Detailed command documentation
