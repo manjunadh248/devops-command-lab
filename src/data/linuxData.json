@@ -1,0 +1,530 @@
+{
+    "name": "Linux",
+    "icon": "💻",
+    "color": "from-yellow-500 to-orange-500",
+    "commands": [
+        {
+            "id": "ls",
+            "name": "ls",
+            "category": "File Navigation",
+            "what": "Lists files and directories in the current location",
+            "why": "Essential for navigating and understanding your file system structure",
+            "when": "Use whenever you need to see what files or folders exist in a directory",
+            "syntax": "ls [options] [directory]",
+            "examples": [
+                {
+                    "cmd": "ls",
+                    "desc": "List files in current directory"
+                },
+                {
+                    "cmd": "ls -la",
+                    "desc": "List all files with details including hidden files"
+                },
+                {
+                    "cmd": "ls -lh",
+                    "desc": "List with human-readable file sizes"
+                }
+            ],
+            "output": "total 24\ndrwxr-xr-x  5 user  staff   160 Dec 15 10:30 .\n-rw-r--r--  1 user  staff  1024 Dec 15 10:30 app.js\ndrwxr-xr-x  3 user  staff    96 Dec 15 10:25 src",
+            "mistakes": [
+                "Forgetting -a flag to see hidden files",
+                "Not using -h for readable file sizes",
+                "Confusing ls with cd command"
+            ],
+            "realWorld": "DevOps engineers use 'ls -la' daily to check deployment directories, verify file permissions, and troubleshoot missing configuration files on servers.",
+            "practice": "List all files in /var/log directory with detailed information"
+        },
+        {
+            "id": "cd",
+            "name": "cd",
+            "category": "File Navigation",
+            "what": "Changes the current working directory",
+            "why": "Navigate through different folders in your system",
+            "when": "Use when you need to move to a different directory to work with files there",
+            "syntax": "cd [directory]",
+            "examples": [
+                {
+                    "cmd": "cd /home/user",
+                    "desc": "Navigate to absolute path"
+                },
+                {
+                    "cmd": "cd ..",
+                    "desc": "Go up one directory level"
+                },
+                {
+                    "cmd": "cd ~",
+                    "desc": "Go to home directory"
+                }
+            ],
+            "output": "$ cd /var/www\n$ pwd\n/var/www",
+            "mistakes": [
+                "Forgetting spaces in directory names need quotes",
+                "Using backslashes instead of forward slashes",
+                "Not using 'cd ~' shortcut for home directory"
+            ],
+            "realWorld": "Navigate to application directories like /opt/app or /var/www/html to deploy code, check logs, or modify configurations.",
+            "practice": "Navigate to your home directory and then to the Documents folder"
+        },
+        {
+            "id": "chmod",
+            "name": "chmod",
+            "category": "Permissions",
+            "what": "Changes file permissions and access rights",
+            "why": "Control who can read, write, or execute files - critical for security",
+            "when": "Setting up applications, fixing permission issues, securing sensitive files",
+            "syntax": "chmod [permissions] [file]",
+            "examples": [
+                {
+                    "cmd": "chmod 755 script.sh",
+                    "desc": "Make script executable by owner, readable by others"
+                },
+                {
+                    "cmd": "chmod +x deploy.sh",
+                    "desc": "Add execute permission"
+                },
+                {
+                    "cmd": "chmod -R 644 *.conf",
+                    "desc": "Set read permissions recursively"
+                }
+            ],
+            "output": "$ chmod 755 deploy.sh\n$ ls -l deploy.sh\n-rwxr-xr-x 1 user staff 2048 Dec 15 10:30 deploy.sh",
+            "mistakes": [
+                "Using 777 (all permissions) for everything - security risk!",
+                "Forgetting -R flag for directories",
+                "Not understanding numeric permissions (755, 644, etc.)"
+            ],
+            "realWorld": "Set execute permissions on CI/CD scripts, secure SSH keys with 600, and ensure web files have correct permissions.",
+            "practice": "Make a shell script executable and verify the permissions changed"
+        },
+        {
+            "id": "grep",
+            "name": "grep",
+            "category": "Text Search",
+            "what": "Searches for patterns in files or input",
+            "why": "Find specific text, errors, or patterns in logs and files",
+            "when": "Debugging, log analysis, searching configuration files",
+            "syntax": "grep [options] pattern [file...]",
+            "examples": [
+                {
+                    "cmd": "grep 'error' app.log",
+                    "desc": "Find lines containing 'error'"
+                },
+                {
+                    "cmd": "grep -i 'warning' *.log",
+                    "desc": "Case-insensitive search in all log files"
+                },
+                {
+                    "cmd": "grep -r 'TODO' ./src",
+                    "desc": "Recursive search in directory"
+                },
+                {
+                    "cmd": "grep -n 'function' script.js",
+                    "desc": "Show line numbers"
+                }
+            ],
+            "output": "app.log:45:ERROR: Connection timeout\napp.log:67:ERROR: Database unavailable\napp.log:123:ERROR: Authentication failed",
+            "mistakes": [
+                "Forgetting quotes around patterns with spaces",
+                "Not using -i for case-insensitive search",
+                "Not using -r for recursive directory search"
+            ],
+            "realWorld": "Search production logs for errors, find configuration values, audit code for security issues.",
+            "practice": "Search for all ERROR messages in /var/log/syslog"
+        },
+        {
+            "id": "cat",
+            "name": "cat",
+            "category": "File Operations",
+            "what": "Displays file contents or concatenates files",
+            "why": "Quickly view file contents without opening an editor",
+            "when": "Viewing configuration files, logs, or combining files",
+            "syntax": "cat [options] [file...]",
+            "examples": [
+                {
+                    "cmd": "cat config.json",
+                    "desc": "Display file contents"
+                },
+                {
+                    "cmd": "cat file1.txt file2.txt",
+                    "desc": "Concatenate multiple files"
+                },
+                {
+                    "cmd": "cat -n script.sh",
+                    "desc": "Display with line numbers"
+                }
+            ],
+            "output": "{\n  \"database\": \"mongodb://localhost:27017\",\n  \"port\": 3000,\n  \"debug\": true\n}",
+            "mistakes": [
+                "Using cat for very large files (use less instead)",
+                "Forgetting cat can concatenate multiple files",
+                "Not using -n for debugging line-specific issues"
+            ],
+            "realWorld": "View configuration files, check environment variables, combine log files for analysis.",
+            "practice": "Display the contents of /etc/hosts with line numbers"
+        },
+        {
+            "id": "mkdir",
+            "name": "mkdir",
+            "category": "File Operations",
+            "what": "Creates new directories",
+            "why": "Organize files and create project structures",
+            "when": "Setting up new projects, creating log directories, organizing files",
+            "syntax": "mkdir [options] directory...",
+            "examples": [
+                {
+                    "cmd": "mkdir myproject",
+                    "desc": "Create single directory"
+                },
+                {
+                    "cmd": "mkdir -p app/src/components",
+                    "desc": "Create nested directories"
+                },
+                {
+                    "cmd": "mkdir logs backups config",
+                    "desc": "Create multiple directories"
+                }
+            ],
+            "output": "$ mkdir -p project/{src,test,docs}\n$ ls project/\ndocs  src  test",
+            "mistakes": [
+                "Forgetting -p flag for nested directories",
+                "Not checking if directory already exists",
+                "Creating directories with spaces without quotes"
+            ],
+            "realWorld": "Create deployment directories, set up project structures, organize backup locations.",
+            "practice": "Create a project structure with src, test, and docs directories"
+        },
+        {
+            "id": "cp",
+            "name": "cp",
+            "category": "File Operations",
+            "what": "Copies files and directories",
+            "why": "Duplicate files, create backups, move content",
+            "when": "Making backups, duplicating configurations, deploying files",
+            "syntax": "cp [options] source destination",
+            "examples": [
+                {
+                    "cmd": "cp config.json config.backup.json",
+                    "desc": "Copy single file"
+                },
+                {
+                    "cmd": "cp -r src/ backup/src/",
+                    "desc": "Copy directory recursively"
+                },
+                {
+                    "cmd": "cp -p original.txt copy.txt",
+                    "desc": "Preserve permissions and timestamps"
+                }
+            ],
+            "output": "$ cp -v config.json config.backup.json\n'config.json' -> 'config.backup.json'",
+            "mistakes": [
+                "Forgetting -r flag for directories",
+                "Overwriting files without backup",
+                "Not preserving permissions with -p"
+            ],
+            "realWorld": "Create configuration backups before changes, copy deployment artifacts, duplicate log files for analysis.",
+            "practice": "Create a backup of a configuration file before editing"
+        },
+        {
+            "id": "mv",
+            "name": "mv",
+            "category": "File Operations",
+            "what": "Moves or renames files and directories",
+            "why": "Reorganize files, rename items, move content between locations",
+            "when": "Renaming files, moving logs, organizing deployments",
+            "syntax": "mv [options] source destination",
+            "examples": [
+                {
+                    "cmd": "mv old.txt new.txt",
+                    "desc": "Rename a file"
+                },
+                {
+                    "cmd": "mv file.txt /backup/",
+                    "desc": "Move file to directory"
+                },
+                {
+                    "cmd": "mv *.log /var/log/archive/",
+                    "desc": "Move multiple files"
+                }
+            ],
+            "output": "$ mv -v app.old.js app.js\nrenamed 'app.old.js' -> 'app.js'",
+            "mistakes": [
+                "Accidentally overwriting existing files",
+                "Not using -i for interactive confirmation",
+                "Moving instead of copying important files"
+            ],
+            "realWorld": "Archive old logs, rename configuration files during deployments, organize backup files.",
+            "practice": "Rename a file and move it to a different directory"
+        },
+        {
+            "id": "rm",
+            "name": "rm",
+            "category": "File Operations",
+            "what": "Removes files and directories",
+            "why": "Clean up temporary files, remove old logs, delete unwanted content",
+            "when": "Cleaning up after builds, removing old deployments, freeing disk space",
+            "syntax": "rm [options] file...",
+            "examples": [
+                {
+                    "cmd": "rm temp.txt",
+                    "desc": "Remove single file"
+                },
+                {
+                    "cmd": "rm -r old_directory/",
+                    "desc": "Remove directory and contents"
+                },
+                {
+                    "cmd": "rm -i important.txt",
+                    "desc": "Remove with confirmation"
+                }
+            ],
+            "output": "$ rm -v *.tmp\nremoved 'cache.tmp'\nremoved 'session.tmp'",
+            "mistakes": [
+                "Using rm -rf without double-checking path",
+                "Forgetting -r flag for directories",
+                "Not using -i for important deletions"
+            ],
+            "realWorld": "Clean build artifacts, remove old log files, delete temporary deployment files.",
+            "practice": "Remove all .tmp files from current directory safely"
+        },
+        {
+            "id": "find",
+            "name": "find",
+            "category": "File Search",
+            "what": "Searches for files in a directory hierarchy",
+            "why": "Locate files by name, type, size, or modification time",
+            "when": "Finding configuration files, locating large files, searching for specific patterns",
+            "syntax": "find [path] [expression]",
+            "examples": [
+                {
+                    "cmd": "find . -name '*.log'",
+                    "desc": "Find all log files"
+                },
+                {
+                    "cmd": "find /var -size +100M",
+                    "desc": "Find files larger than 100MB"
+                },
+                {
+                    "cmd": "find . -mtime -1",
+                    "desc": "Find files modified in last 24 hours"
+                },
+                {
+                    "cmd": "find . -type d -name 'node_modules'",
+                    "desc": "Find directories by name"
+                }
+            ],
+            "output": "$ find . -name '*.js'\n./src/app.js\n./src/utils/helper.js\n./test/app.test.js",
+            "mistakes": [
+                "Forgetting the starting path",
+                "Not quoting patterns with wildcards",
+                "Confusing -name (case-sensitive) with -iname"
+            ],
+            "realWorld": "Find large log files consuming disk space, locate configuration files, search for specific file types.",
+            "practice": "Find all JavaScript files modified in the last week"
+        },
+        {
+            "id": "ps",
+            "name": "ps",
+            "category": "Process Management",
+            "what": "Displays information about running processes",
+            "why": "Monitor running applications, troubleshoot system issues",
+            "when": "Debugging, checking if services are running, monitoring resources",
+            "syntax": "ps [options]",
+            "examples": [
+                {
+                    "cmd": "ps aux",
+                    "desc": "Show all processes with details"
+                },
+                {
+                    "cmd": "ps aux | grep node",
+                    "desc": "Find Node.js processes"
+                },
+                {
+                    "cmd": "ps -ef",
+                    "desc": "Full format listing"
+                }
+            ],
+            "output": "USER  PID %CPU %MEM    VSZ   RSS TTY  STAT START   TIME COMMAND\nroot    1  0.0  0.1 168936 11400 ?    Ss   Dec14   0:03 node app.js\nroot  234  0.0  0.2 256789 20480 ?    Sl   Dec14   0:15 nginx",
+            "mistakes": [
+                "Forgetting to use grep to filter results",
+                "Not understanding aux vs ef options",
+                "Overlooking zombie or defunct processes"
+            ],
+            "realWorld": "Check if application servers are running, find memory-hungry processes, debug startup issues.",
+            "practice": "Find all running Node.js or Python processes"
+        },
+        {
+            "id": "kill",
+            "name": "kill",
+            "category": "Process Management",
+            "what": "Sends signals to processes to terminate or control them",
+            "why": "Stop hung processes, restart services, manage applications",
+            "when": "Application not responding, need to restart service, freeing resources",
+            "syntax": "kill [signal] PID",
+            "examples": [
+                {
+                    "cmd": "kill 1234",
+                    "desc": "Send TERM signal to process"
+                },
+                {
+                    "cmd": "kill -9 1234",
+                    "desc": "Force kill process immediately"
+                },
+                {
+                    "cmd": "kill -HUP 1234",
+                    "desc": "Send reload signal"
+                }
+            ],
+            "output": "$ kill -9 5678\n$ ps aux | grep 5678\n(no output - process terminated)",
+            "mistakes": [
+                "Using kill -9 as first option (doesn't allow cleanup)",
+                "Killing wrong process (verify PID first)",
+                "Not checking if process actually stopped"
+            ],
+            "realWorld": "Restart hung application servers, terminate runaway processes, reload configuration without restart.",
+            "practice": "Find and gracefully terminate a process by name"
+        },
+        {
+            "id": "tail",
+            "name": "tail",
+            "category": "Log Analysis",
+            "what": "Displays the last part of files",
+            "why": "View recent log entries, monitor files in real-time",
+            "when": "Debugging, monitoring logs, checking recent activity",
+            "syntax": "tail [options] file",
+            "examples": [
+                {
+                    "cmd": "tail app.log",
+                    "desc": "Show last 10 lines"
+                },
+                {
+                    "cmd": "tail -n 50 app.log",
+                    "desc": "Show last 50 lines"
+                },
+                {
+                    "cmd": "tail -f app.log",
+                    "desc": "Follow file in real-time"
+                }
+            ],
+            "output": "$ tail -f /var/log/nginx/access.log\n192.168.1.1 - - [15/Dec/2024:10:30:45] \"GET /api/users\" 200\n192.168.1.2 - - [15/Dec/2024:10:30:46] \"POST /api/login\" 401",
+            "mistakes": [
+                "Not using -f for real-time monitoring",
+                "Forgetting to specify number of lines",
+                "Using cat instead of tail for large files"
+            ],
+            "realWorld": "Monitor application logs during deployments, debug production issues in real-time, watch for errors.",
+            "practice": "Monitor the system logs in real-time"
+        },
+        {
+            "id": "ssh",
+            "name": "ssh",
+            "category": "Remote Access",
+            "what": "Securely connects to remote servers",
+            "why": "Access and manage remote systems securely",
+            "when": "Deploying to servers, debugging remote issues, managing infrastructure",
+            "syntax": "ssh [options] user@host",
+            "examples": [
+                {
+                    "cmd": "ssh user@server.com",
+                    "desc": "Connect to remote server"
+                },
+                {
+                    "cmd": "ssh -i key.pem ec2-user@aws-instance",
+                    "desc": "Connect with SSH key"
+                },
+                {
+                    "cmd": "ssh -p 2222 user@server.com",
+                    "desc": "Connect on custom port"
+                }
+            ],
+            "output": "$ ssh deploy@production-server\nWelcome to Ubuntu 22.04.1 LTS\nLast login: Sun Dec 15 09:00:00 2024\ndeploy@production-server:~$",
+            "mistakes": [
+                "Wrong permissions on SSH key (should be 600)",
+                "Connecting to wrong port",
+                "Not adding server to known_hosts"
+            ],
+            "realWorld": "Deploy applications to production servers, troubleshoot remote systems, manage cloud infrastructure.",
+            "practice": "Connect to a remote server and check its uptime"
+        },
+        {
+            "id": "curl",
+            "name": "curl",
+            "category": "Networking",
+            "what": "Transfers data from or to a server",
+            "why": "Test APIs, download files, debug network issues",
+            "when": "Testing endpoints, downloading scripts, checking connectivity",
+            "syntax": "curl [options] URL",
+            "examples": [
+                {
+                    "cmd": "curl https://api.example.com/health",
+                    "desc": "GET request"
+                },
+                {
+                    "cmd": "curl -X POST -d '{\"name\":\"test\"}' -H 'Content-Type: application/json' URL",
+                    "desc": "POST JSON"
+                },
+                {
+                    "cmd": "curl -o file.zip https://example.com/file.zip",
+                    "desc": "Download file"
+                }
+            ],
+            "output": "$ curl http://localhost:3000/api/health\n{\"status\":\"ok\",\"uptime\":\"5d 12h\",\"version\":\"1.2.3\"}",
+            "mistakes": [
+                "Forgetting Content-Type header for POST requests",
+                "Not using -v for debugging",
+                "Ignoring SSL certificate errors in production"
+            ],
+            "realWorld": "Test API endpoints, health checks in CI/CD, download installation scripts.",
+            "practice": "Test the health endpoint of a running service"
+        }
+    ],
+    "quiz": [
+        {
+            "question": "You need to list all files including hidden configuration files. Which command?",
+            "options": [
+                "ls",
+                "ls -l",
+                "ls -a",
+                "ls -la"
+            ],
+            "correct": 3,
+            "explanation": "ls -la combines -l (detailed list) with -a (all files including hidden). Most comprehensive listing."
+        },
+        {
+            "question": "What does 'chmod 755 script.sh' do?",
+            "options": [
+                "Gives everyone full permissions",
+                "Owner can read/write/execute, others can read/execute",
+                "Makes file read-only",
+                "Deletes the file"
+            ],
+            "correct": 1,
+            "explanation": "755 means: Owner (7=rwx), Group (5=rx), Others (5=rx). Standard for executable scripts."
+        }
+    ],
+    "project": {
+        "title": "Linux Server Setup Basics",
+        "description": "Practice essential Linux commands by setting up a basic project directory structure",
+        "steps": [
+            {
+                "cmd": "mkdir -p devops-project/{src,config,logs}",
+                "desc": "Create project directory structure"
+            },
+            {
+                "cmd": "cd devops-project",
+                "desc": "Navigate to project folder"
+            },
+            {
+                "cmd": "touch src/app.js config/settings.json",
+                "desc": "Create application files"
+            },
+            {
+                "cmd": "chmod 755 src/app.js",
+                "desc": "Set executable permissions"
+            },
+            {
+                "cmd": "ls -lR",
+                "desc": "Verify the structure"
+            }
+        ]
+    }
+}

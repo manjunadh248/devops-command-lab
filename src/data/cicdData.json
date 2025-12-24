@@ -1,0 +1,410 @@
+{
+    "name": "CI/CD",
+    "icon": "🔄",
+    "color": "from-green-500 to-teal-500",
+    "commands": [
+        {
+            "id": "gh-actions-workflow",
+            "name": "GitHub Actions Workflow",
+            "category": "Workflow Basics",
+            "what": "Automated workflows triggered by repository events",
+            "why": "Automate testing, building, and deploying applications",
+            "when": "Every code push, pull request, or scheduled interval",
+            "syntax": ".github/workflows/*.yml",
+            "examples": [
+                {
+                    "cmd": "on: push",
+                    "desc": "Trigger on every push"
+                },
+                {
+                    "cmd": "on: pull_request",
+                    "desc": "Trigger on PR events"
+                },
+                {
+                    "cmd": "on: schedule: - cron: '0 0 * * *'",
+                    "desc": "Daily scheduled run"
+                }
+            ],
+            "output": "✓ Build\n  ✓ Setup Node.js\n  ✓ Install dependencies\n  ✓ Run tests\n✓ Deploy\n  ✓ Push to registry",
+            "mistakes": [
+                "Storing secrets in workflow files",
+                "Not caching dependencies",
+                "Running all jobs sequentially when parallelizable"
+            ],
+            "realWorld": "Automate entire deployment pipelines from code commit to production.",
+            "practice": "Create a workflow that runs tests on every push"
+        },
+        {
+            "id": "gh-actions-jobs",
+            "name": "Jobs & Steps",
+            "category": "Workflow Structure",
+            "what": "Define jobs that run on specific runners with multiple steps",
+            "why": "Organize workflow into logical units, parallelize work",
+            "when": "Structuring build, test, and deploy phases",
+            "syntax": "jobs:\n  job-name:\n    runs-on: ubuntu-latest\n    steps:",
+            "examples": [
+                {
+                    "cmd": "runs-on: ubuntu-latest",
+                    "desc": "Run on Ubuntu"
+                },
+                {
+                    "cmd": "runs-on: self-hosted",
+                    "desc": "Run on self-hosted runner"
+                },
+                {
+                    "cmd": "needs: build",
+                    "desc": "Job dependency"
+                }
+            ],
+            "output": "Job: build (ubuntu-latest)\n  ✓ Checkout code\n  ✓ Setup Node\n  ✓ Install deps\n  ✓ Build",
+            "mistakes": [
+                "Not using matrix builds for multi-version testing",
+                "Forgetting job dependencies with 'needs'",
+                "Not utilizing parallel jobs"
+            ],
+            "realWorld": "Structure CI pipelines with separate build, test, and deploy jobs.",
+            "practice": "Create a multi-job workflow with dependencies"
+        },
+        {
+            "id": "gh-actions-checkout",
+            "name": "actions/checkout",
+            "category": "Common Actions",
+            "what": "Checks out your repository code",
+            "why": "Access your code in the workflow",
+            "when": "First step in most workflows",
+            "syntax": "uses: actions/checkout@v4",
+            "examples": [
+                {
+                    "cmd": "uses: actions/checkout@v4",
+                    "desc": "Basic checkout"
+                },
+                {
+                    "cmd": "with:\n  fetch-depth: 0",
+                    "desc": "Full git history"
+                },
+                {
+                    "cmd": "with:\n  ref: ${{ github.head_ref }}",
+                    "desc": "Checkout PR branch"
+                }
+            ],
+            "output": "✓ Checkout\n  Fetching the repository\n  Checking out branch 'main'",
+            "mistakes": [
+                "Forgetting to checkout before using code",
+                "Using old action versions",
+                "Not fetching full history when needed for tags"
+            ],
+            "realWorld": "Required for any workflow that needs repository code.",
+            "practice": "Add checkout step to your workflow"
+        },
+        {
+            "id": "gh-actions-setup-node",
+            "name": "actions/setup-node",
+            "category": "Common Actions",
+            "what": "Sets up Node.js environment",
+            "why": "Install specific Node.js version for your build",
+            "when": "Building Node.js applications",
+            "syntax": "uses: actions/setup-node@v4",
+            "examples": [
+                {
+                    "cmd": "with:\n  node-version: '20'",
+                    "desc": "Specific version"
+                },
+                {
+                    "cmd": "with:\n  node-version-file: '.nvmrc'",
+                    "desc": "From .nvmrc"
+                },
+                {
+                    "cmd": "with:\n  cache: 'npm'",
+                    "desc": "Enable npm cache"
+                }
+            ],
+            "output": "✓ Setup Node.js\n  Version: 20.10.0\n  npm cache: Enabled",
+            "mistakes": [
+                "Not specifying Node version",
+                "Forgetting to enable caching",
+                "Using incompatible versions"
+            ],
+            "realWorld": "Set up consistent Node.js environment across all builds.",
+            "practice": "Configure Node.js with caching enabled"
+        },
+        {
+            "id": "gh-actions-secrets",
+            "name": "Secrets Management",
+            "category": "Security",
+            "what": "Securely store and access sensitive data",
+            "why": "Keep credentials safe, don't expose in code",
+            "when": "Accessing API keys, deployment credentials",
+            "syntax": "${{ secrets.SECRET_NAME }}",
+            "examples": [
+                {
+                    "cmd": "env:\n  API_KEY: ${{ secrets.API_KEY }}",
+                    "desc": "Use as env var"
+                },
+                {
+                    "cmd": "${{ secrets.GITHUB_TOKEN }}",
+                    "desc": "Built-in token"
+                },
+                {
+                    "cmd": "docker login -p ${{ secrets.DOCKER_PASSWORD }}",
+                    "desc": "In commands"
+                }
+            ],
+            "output": "Using secret: ***\n(Secret values are masked in logs)",
+            "mistakes": [
+                "Hardcoding secrets in workflow files",
+                "Printing secrets in logs",
+                "Not rotating secrets regularly"
+            ],
+            "realWorld": "Store API keys, deployment passwords, registry credentials.",
+            "practice": "Add a secret and use it in your workflow"
+        },
+        {
+            "id": "gh-actions-env",
+            "name": "Environment Variables",
+            "category": "Configuration",
+            "what": "Pass configuration values to jobs and steps",
+            "why": "Configure builds, share values between steps",
+            "when": "Dynamic configuration, feature flags",
+            "syntax": "env:\n  KEY: value",
+            "examples": [
+                {
+                    "cmd": "env:\n  NODE_ENV: production",
+                    "desc": "Global env"
+                },
+                {
+                    "cmd": "${{ env.MY_VAR }}",
+                    "desc": "Reference env var"
+                },
+                {
+                    "cmd": "echo \"VAR=value\" >> $GITHUB_ENV",
+                    "desc": "Set from step"
+                }
+            ],
+            "output": "Environment:\n  NODE_ENV=production\n  CI=true",
+            "mistakes": [
+                "Using env for secrets",
+                "Not understanding scope (workflow vs job vs step)",
+                "Forgetting to export to GITHUB_ENV"
+            ],
+            "realWorld": "Configure build modes, pass values between steps.",
+            "practice": "Set and use environment variables"
+        },
+        {
+            "id": "gh-actions-matrix",
+            "name": "Matrix Strategy",
+            "category": "Advanced",
+            "what": "Run jobs with multiple configurations",
+            "why": "Test across Node versions, OS, etc.",
+            "when": "Cross-platform testing, multi-version support",
+            "syntax": "strategy:\n  matrix:\n    node: [18, 20]",
+            "examples": [
+                {
+                    "cmd": "matrix:\n  node: [18, 20, 22]",
+                    "desc": "Test multiple Node versions"
+                },
+                {
+                    "cmd": "matrix:\n  os: [ubuntu-latest, windows-latest]",
+                    "desc": "Multi-OS testing"
+                },
+                {
+                    "cmd": "${{ matrix.node }}",
+                    "desc": "Reference matrix value"
+                }
+            ],
+            "output": "Jobs created:\n  test (node: 18)\n  test (node: 20)\n  test (node: 22)",
+            "mistakes": [
+                "Too many matrix combinations (expensive)",
+                "Not using fail-fast appropriately",
+                "Forgetting matrix reference syntax"
+            ],
+            "realWorld": "Ensure app works across Node versions and operating systems.",
+            "practice": "Create a matrix build for multiple Node versions"
+        },
+        {
+            "id": "gh-actions-artifacts",
+            "name": "Artifacts",
+            "category": "Advanced",
+            "what": "Store and share files between jobs",
+            "why": "Pass build outputs, store test reports",
+            "when": "Multi-job pipelines, storing outputs",
+            "syntax": "uses: actions/upload-artifact@v4",
+            "examples": [
+                {
+                    "cmd": "uses: actions/upload-artifact@v4\nwith:\n  name: build\n  path: dist/",
+                    "desc": "Upload build"
+                },
+                {
+                    "cmd": "uses: actions/download-artifact@v4",
+                    "desc": "Download in another job"
+                }
+            ],
+            "output": "Artifact 'build' uploaded\n  Files: 15\n  Size: 2.3 MB",
+            "mistakes": [
+                "Not specifying retention days",
+                "Uploading too many files",
+                "Not downloading in dependent jobs"
+            ],
+            "realWorld": "Share build between test and deploy jobs, store coverage reports.",
+            "practice": "Upload and download artifacts between jobs"
+        },
+        {
+            "id": "gh-actions-docker",
+            "name": "Docker Build & Push",
+            "category": "Deployment",
+            "what": "Build and push Docker images in CI",
+            "why": "Automate container image creation",
+            "when": "Container-based deployments",
+            "syntax": "uses: docker/build-push-action@v5",
+            "examples": [
+                {
+                    "cmd": "uses: docker/login-action@v3\nwith:\n  registry: ghcr.io",
+                    "desc": "Login to registry"
+                },
+                {
+                    "cmd": "uses: docker/build-push-action@v5\nwith:\n  push: true\n  tags: user/app:latest",
+                    "desc": "Build and push"
+                }
+            ],
+            "output": "Building image...\nPushing to ghcr.io/user/app:latest\n✓ Image pushed successfully",
+            "mistakes": [
+                "Not caching Docker layers",
+                "Forgetting to login to registry",
+                "Using :latest in production"
+            ],
+            "realWorld": "Build images on every merge, push to container registries.",
+            "practice": "Build and push a Docker image in your workflow"
+        },
+        {
+            "id": "gh-actions-deploy",
+            "name": "Deployment Jobs",
+            "category": "Deployment",
+            "what": "Deploy applications to various platforms",
+            "why": "Automate production deployments",
+            "when": "After successful builds and tests",
+            "syntax": "environment:\n  name: production\n  url: https://app.com",
+            "examples": [
+                {
+                    "cmd": "environment: production",
+                    "desc": "Use protected environment"
+                },
+                {
+                    "cmd": "needs: [build, test]",
+                    "desc": "Depend on prior jobs"
+                },
+                {
+                    "cmd": "if: github.ref == 'refs/heads/main'",
+                    "desc": "Only deploy from main"
+                }
+            ],
+            "output": "Deploying to production...\n✓ Deployed to https://app-prod.com\nEnvironment: production",
+            "mistakes": [
+                "Deploying without environment protection",
+                "Not waiting for tests to pass",
+                "Missing rollback strategy"
+            ],
+            "realWorld": "Automated deployments to staging and production.",
+            "practice": "Create a deployment job with environment protection"
+        },
+        {
+            "id": "gh-actions-cache",
+            "name": "Caching",
+            "category": "Optimization",
+            "what": "Cache dependencies between workflow runs",
+            "why": "Speed up builds, reduce redundant work",
+            "when": "Installing dependencies, building",
+            "syntax": "uses: actions/cache@v4",
+            "examples": [
+                {
+                    "cmd": "uses: actions/cache@v4\nwith:\n  path: ~/.npm\n  key: npm-${{ hashFiles('package-lock.json') }}",
+                    "desc": "Cache npm"
+                },
+                {
+                    "cmd": "uses: actions/setup-node@v4\nwith:\n  cache: 'npm'",
+                    "desc": "Built-in caching"
+                }
+            ],
+            "output": "Cache hit: npm-abc123\n✓ Using cached dependencies\nSaved: 45 seconds",
+            "mistakes": [
+                "Not using hash for cache key",
+                "Caching wrong paths",
+                "Cache key too generic (always miss)"
+            ],
+            "realWorld": "Reduce CI time from 5min to 1min with proper caching.",
+            "practice": "Add caching to your npm install step"
+        },
+        {
+            "id": "gh-actions-conditional",
+            "name": "Conditional Execution",
+            "category": "Control Flow",
+            "what": "Run steps or jobs conditionally",
+            "why": "Skip unnecessary work, branch-specific logic",
+            "when": "Deploy only from main, skip on draft PRs",
+            "syntax": "if: condition",
+            "examples": [
+                {
+                    "cmd": "if: github.event_name == 'push'",
+                    "desc": "Only on push"
+                },
+                {
+                    "cmd": "if: github.ref == 'refs/heads/main'",
+                    "desc": "Only on main branch"
+                },
+                {
+                    "cmd": "if: always()",
+                    "desc": "Run even if previous failed"
+                },
+                {
+                    "cmd": "if: failure()",
+                    "desc": "Run only on failure"
+                }
+            ],
+            "output": "Job: deploy\n  Condition: github.ref == 'refs/heads/main'\n  Result: Skipped (on feature branch)",
+            "mistakes": [
+                "Complex conditions without testing",
+                "Forgetting always() for cleanup steps",
+                "Not using failure() for notifications"
+            ],
+            "realWorld": "Deploy only from main, run extra steps on tags.",
+            "practice": "Add conditional deployment for main branch only"
+        }
+    ],
+    "quiz": [
+        {
+            "question": "Where should GitHub Actions workflow files be stored?",
+            "options": [
+                "/.workflows/",
+                "/.github/actions/",
+                "/.github/workflows/",
+                "/ci/"
+            ],
+            "correct": 2,
+            "explanation": "GitHub Actions workflows must be stored in .github/workflows/ directory."
+        }
+    ],
+    "project": {
+        "title": "Create a CI/CD Pipeline",
+        "description": "Build a complete CI/CD workflow for a Node.js application",
+        "steps": [
+            {
+                "cmd": "mkdir -p .github/workflows",
+                "desc": "Create workflows directory"
+            },
+            {
+                "cmd": "touch .github/workflows/ci.yml",
+                "desc": "Create workflow file"
+            },
+            {
+                "cmd": "# Add workflow configuration",
+                "desc": "Define jobs and steps"
+            },
+            {
+                "cmd": "git add .github/",
+                "desc": "Stage workflow files"
+            },
+            {
+                "cmd": "git push origin main",
+                "desc": "Push to trigger workflow"
+            }
+        ]
+    }
+}

@@ -1,0 +1,46 @@
+[
+    {
+        "id": 1,
+        "scenario": "You need to see all files including hidden configuration files in the current directory with detailed permissions.",
+        "correctCommand": "ls -la",
+        "hints": [
+            "Think about listing files",
+            "You need ALL files",
+            "Include details and hidden files"
+        ],
+        "tool": "linux"
+    },
+    {
+        "id": 2,
+        "scenario": "Initialize a new Git repository in the current directory to start tracking your DevOps scripts.",
+        "correctCommand": "git init",
+        "hints": [
+            "Start version control",
+            "Initialize repository",
+            "Two-word command"
+        ],
+        "tool": "git"
+    },
+    {
+        "id": 3,
+        "scenario": "Build a Docker image named 'myapp' with tag 'v1.0' from the Dockerfile in the current directory.",
+        "correctCommand": "docker build -t myapp:v1.0 .",
+        "hints": [
+            "Build an image",
+            "Use -t flag for tagging",
+            "Don't forget the context path"
+        ],
+        "tool": "docker"
+    },
+    {
+        "id": 4,
+        "scenario": "Check the status of all pods running in your Kubernetes cluster.",
+        "correctCommand": "kubectl get pods",
+        "hints": [
+            "Get resources",
+            "Looking for pods",
+            "kubectl command"
+        ],
+        "tool": "kubernetes"
+    }
+]

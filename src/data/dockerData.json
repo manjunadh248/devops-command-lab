@@ -1,0 +1,424 @@
+{
+    "name": "Docker",
+    "icon": "🐳",
+    "color": "from-blue-500 to-cyan-500",
+    "commands": [
+        {
+            "id": "docker-build",
+            "name": "docker build",
+            "category": "Image Management",
+            "what": "Creates a Docker image from a Dockerfile",
+            "why": "Package your application with all its dependencies into a portable container",
+            "when": "When you've written/updated a Dockerfile and need to create an image",
+            "syntax": "docker build -t [name:tag] [path]",
+            "examples": [
+                {
+                    "cmd": "docker build -t myapp:latest .",
+                    "desc": "Build image from current directory"
+                },
+                {
+                    "cmd": "docker build -t myapp:v1.0 -f Dockerfile.prod .",
+                    "desc": "Build with specific Dockerfile"
+                },
+                {
+                    "cmd": "docker build --no-cache -t myapp:latest .",
+                    "desc": "Build without using cache"
+                }
+            ],
+            "output": "Sending build context to Docker daemon  3.072kB\nStep 1/5 : FROM node:18-alpine\nStep 2/5 : WORKDIR /app\nSuccessfully built 7b8f9a2c3d4e\nSuccessfully tagged myapp:latest",
+            "mistakes": [
+                "Not using .dockerignore - includes unnecessary files",
+                "Forgetting the dot (.) at the end",
+                "Not tagging images properly",
+                "Building from wrong directory"
+            ],
+            "realWorld": "Build container images for microservices, create custom base images for CI/CD pipelines.",
+            "practice": "Create a simple Dockerfile and build an image named 'webapp:dev'"
+        },
+        {
+            "id": "docker-run",
+            "name": "docker run",
+            "category": "Container Operations",
+            "what": "Creates and starts a container from an image",
+            "why": "Actually run your application in an isolated environment",
+            "when": "Testing locally, running services, deploying containers",
+            "syntax": "docker run [options] [image] [command]",
+            "examples": [
+                {
+                    "cmd": "docker run -d -p 8080:80 nginx",
+                    "desc": "Run nginx in background on port 8080"
+                },
+                {
+                    "cmd": "docker run -it ubuntu bash",
+                    "desc": "Run Ubuntu interactively with bash"
+                },
+                {
+                    "cmd": "docker run --name api -e DB_HOST=localhost myapp",
+                    "desc": "Run with environment variables"
+                },
+                {
+                    "cmd": "docker run -v $(pwd):/app myapp",
+                    "desc": "Run with volume mount"
+                }
+            ],
+            "output": "$ docker run -d -p 8080:80 nginx\n3f9a8b2c1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0",
+            "mistakes": [
+                "Forgetting -d flag and blocking terminal",
+                "Port conflicts (port already in use)",
+                "Not naming containers (--name)",
+                "Not cleaning up stopped containers"
+            ],
+            "realWorld": "Deploy microservices locally for testing, run database containers for development.",
+            "practice": "Run a container from your built image and expose it on port 3000"
+        },
+        {
+            "id": "docker-ps",
+            "name": "docker ps",
+            "category": "Container Operations",
+            "what": "Lists running containers",
+            "why": "Monitor what containers are currently active",
+            "when": "Checking container status, debugging, managing resources",
+            "syntax": "docker ps [options]",
+            "examples": [
+                {
+                    "cmd": "docker ps",
+                    "desc": "List running containers"
+                },
+                {
+                    "cmd": "docker ps -a",
+                    "desc": "List all containers (including stopped)"
+                },
+                {
+                    "cmd": "docker ps --format 'table {{.Names}}\t{{.Status}}'",
+                    "desc": "Custom format output"
+                }
+            ],
+            "output": "CONTAINER ID   IMAGE   COMMAND   CREATED   STATUS   PORTS   NAMES\n3f9a8b2c1d4e   nginx   \"/docker-entrypoint\"   3 min ago   Up 3 min   0.0.0.0:8080->80/tcp   web",
+            "mistakes": [
+                "Forgetting -a to see stopped containers",
+                "Not using filters to find specific containers",
+                "Ignoring container status information"
+            ],
+            "realWorld": "Monitor deployed containers, check health status, identify failed containers.",
+            "practice": "List all containers and identify which ones are running"
+        },
+        {
+            "id": "docker-stop",
+            "name": "docker stop",
+            "category": "Container Operations",
+            "what": "Stops running containers gracefully",
+            "why": "Cleanly shut down containers allowing processes to finish",
+            "when": "Stopping services, maintenance, updates",
+            "syntax": "docker stop [container...]",
+            "examples": [
+                {
+                    "cmd": "docker stop web",
+                    "desc": "Stop container by name"
+                },
+                {
+                    "cmd": "docker stop $(docker ps -q)",
+                    "desc": "Stop all running containers"
+                },
+                {
+                    "cmd": "docker stop -t 30 web",
+                    "desc": "Stop with 30 second timeout"
+                }
+            ],
+            "output": "$ docker stop web\nweb",
+            "mistakes": [
+                "Using docker kill instead (doesn't allow graceful shutdown)",
+                "Not waiting for container to stop completely",
+                "Forgetting to remove stopped containers"
+            ],
+            "realWorld": "Stop services during maintenance windows, gracefully shut down during deployments.",
+            "practice": "Stop a running container and verify it's stopped"
+        },
+        {
+            "id": "docker-logs",
+            "name": "docker logs",
+            "category": "Debugging",
+            "what": "Fetches logs from a container",
+            "why": "Debug container issues, monitor application output",
+            "when": "Debugging errors, monitoring applications, troubleshooting",
+            "syntax": "docker logs [options] container",
+            "examples": [
+                {
+                    "cmd": "docker logs web",
+                    "desc": "Show container logs"
+                },
+                {
+                    "cmd": "docker logs -f web",
+                    "desc": "Follow logs in real-time"
+                },
+                {
+                    "cmd": "docker logs --tail 100 web",
+                    "desc": "Show last 100 lines"
+                },
+                {
+                    "cmd": "docker logs --since 1h web",
+                    "desc": "Show logs from last hour"
+                }
+            ],
+            "output": "2024-12-15 10:30:00 Server started on port 3000\n2024-12-15 10:30:05 Connected to database\n2024-12-15 10:30:10 Ready to accept connections",
+            "mistakes": [
+                "Not using -f for real-time debugging",
+                "Looking at old logs instead of using --since",
+                "Not checking logs before assuming container is healthy"
+            ],
+            "realWorld": "Debug production issues, monitor application startup, troubleshoot failed containers.",
+            "practice": "View real-time logs of a running container"
+        },
+        {
+            "id": "docker-exec",
+            "name": "docker exec",
+            "category": "Debugging",
+            "what": "Runs a command in a running container",
+            "why": "Debug, inspect, or manage containers from inside",
+            "when": "Debugging, running maintenance tasks, inspecting files",
+            "syntax": "docker exec [options] container command",
+            "examples": [
+                {
+                    "cmd": "docker exec -it web bash",
+                    "desc": "Open interactive shell"
+                },
+                {
+                    "cmd": "docker exec web cat /etc/nginx/nginx.conf",
+                    "desc": "View config file"
+                },
+                {
+                    "cmd": "docker exec -u root web apt update",
+                    "desc": "Run command as root"
+                }
+            ],
+            "output": "$ docker exec -it web bash\nroot@3f9a8b2c:/app#",
+            "mistakes": [
+                "Forgetting -it flags for interactive sessions",
+                "Running commands that modify container state permanently",
+                "Not specifying user when needed"
+            ],
+            "realWorld": "Debug production containers, run database migrations, check configuration files.",
+            "practice": "Open a shell in a running container and explore the filesystem"
+        },
+        {
+            "id": "docker-images",
+            "name": "docker images",
+            "category": "Image Management",
+            "what": "Lists locally available Docker images",
+            "why": "See what images are available, check versions, manage storage",
+            "when": "Before running containers, cleaning up disk space, checking versions",
+            "syntax": "docker images [options]",
+            "examples": [
+                {
+                    "cmd": "docker images",
+                    "desc": "List all images"
+                },
+                {
+                    "cmd": "docker images nginx",
+                    "desc": "List nginx images only"
+                },
+                {
+                    "cmd": "docker images --filter 'dangling=true'",
+                    "desc": "List unused images"
+                }
+            ],
+            "output": "REPOSITORY   TAG       IMAGE ID       CREATED        SIZE\nnginx        latest    605c77e624dd   2 weeks ago    141MB\nmyapp        v1.0      7b8f9a2c3d4e   1 hour ago     89MB",
+            "mistakes": [
+                "Not cleaning up old images",
+                "Ignoring image sizes (disk space issues)",
+                "Not using specific tags in production"
+            ],
+            "realWorld": "Audit available images, clean up CI/CD runners, verify deployment images.",
+            "practice": "List all images and identify the largest ones"
+        },
+        {
+            "id": "docker-pull",
+            "name": "docker pull",
+            "category": "Image Management",
+            "what": "Downloads an image from a registry",
+            "why": "Get latest versions of base images, download dependencies",
+            "when": "Before building, updating images, setting up environments",
+            "syntax": "docker pull [image:tag]",
+            "examples": [
+                {
+                    "cmd": "docker pull nginx:latest",
+                    "desc": "Pull latest nginx"
+                },
+                {
+                    "cmd": "docker pull node:18-alpine",
+                    "desc": "Pull specific version"
+                },
+                {
+                    "cmd": "docker pull myregistry.com/myapp:v1.0",
+                    "desc": "Pull from private registry"
+                }
+            ],
+            "output": "$ docker pull nginx:latest\nlatest: Pulling from library/nginx\nDigest: sha256:abc123...\nStatus: Downloaded newer image for nginx:latest",
+            "mistakes": [
+                "Using :latest in production (unpredictable updates)",
+                "Not specifying registry for private images",
+                "Pulling without checking available tags"
+            ],
+            "realWorld": "Update base images, pull from private registries, prepare CI/CD environments.",
+            "practice": "Pull the latest Alpine Linux image"
+        },
+        {
+            "id": "docker-push",
+            "name": "docker push",
+            "category": "Image Management",
+            "what": "Uploads an image to a registry",
+            "why": "Share images, deploy to production, backup images",
+            "when": "After building, during CI/CD, publishing releases",
+            "syntax": "docker push [image:tag]",
+            "examples": [
+                {
+                    "cmd": "docker push myregistry.com/myapp:v1.0",
+                    "desc": "Push to registry"
+                },
+                {
+                    "cmd": "docker push --all-tags myapp",
+                    "desc": "Push all tags"
+                }
+            ],
+            "output": "$ docker push myregistry.com/myapp:v1.0\nThe push refers to repository [myregistry.com/myapp]\nv1.0: digest: sha256:abc123... size: 1234",
+            "mistakes": [
+                "Pushing without proper tagging",
+                "Not logging in to registry first",
+                "Pushing large images without optimization"
+            ],
+            "realWorld": "Publish images to Docker Hub, push to ECR/GCR, deploy to Kubernetes.",
+            "practice": "Tag and push an image to a registry"
+        },
+        {
+            "id": "docker-rm",
+            "name": "docker rm",
+            "category": "Cleanup",
+            "what": "Removes stopped containers",
+            "why": "Free up disk space, clean up unused containers",
+            "when": "After development, cleaning CI runners, maintenance",
+            "syntax": "docker rm [container...]",
+            "examples": [
+                {
+                    "cmd": "docker rm web",
+                    "desc": "Remove specific container"
+                },
+                {
+                    "cmd": "docker rm $(docker ps -aq)",
+                    "desc": "Remove all stopped containers"
+                },
+                {
+                    "cmd": "docker rm -f web",
+                    "desc": "Force remove running container"
+                }
+            ],
+            "output": "$ docker rm web\nweb",
+            "mistakes": [
+                "Trying to remove running containers without -f",
+                "Not cleaning up regularly",
+                "Removing containers with important data"
+            ],
+            "realWorld": "Clean up after deployments, maintain CI/CD runners, free disk space.",
+            "practice": "Remove all stopped containers safely"
+        },
+        {
+            "id": "docker-rmi",
+            "name": "docker rmi",
+            "category": "Cleanup",
+            "what": "Removes Docker images",
+            "why": "Free disk space, remove old versions, clean environments",
+            "when": "After builds, when images are outdated, disk cleanup",
+            "syntax": "docker rmi [image...]",
+            "examples": [
+                {
+                    "cmd": "docker rmi nginx:old",
+                    "desc": "Remove specific image"
+                },
+                {
+                    "cmd": "docker rmi $(docker images -q --filter 'dangling=true')",
+                    "desc": "Remove dangling images"
+                },
+                {
+                    "cmd": "docker image prune -a",
+                    "desc": "Remove all unused images"
+                }
+            ],
+            "output": "$ docker rmi nginx:old\nUntagged: nginx:old\nDeleted: sha256:abc123...",
+            "mistakes": [
+                "Removing images still used by containers",
+                "Not checking what will be deleted",
+                "Using -f without understanding consequences"
+            ],
+            "realWorld": "Clean up CI/CD build runners, free disk space on servers, maintain image hygiene.",
+            "practice": "Remove all dangling (unused) images"
+        },
+        {
+            "id": "docker-compose-up",
+            "name": "docker compose up",
+            "category": "Multi-Container",
+            "what": "Builds, creates, and starts containers defined in docker-compose.yml",
+            "why": "Run multi-container applications with a single command",
+            "when": "Starting local development, running full stacks, testing",
+            "syntax": "docker compose up [options]",
+            "examples": [
+                {
+                    "cmd": "docker compose up -d",
+                    "desc": "Start in detached mode"
+                },
+                {
+                    "cmd": "docker compose up --build",
+                    "desc": "Rebuild images before starting"
+                },
+                {
+                    "cmd": "docker compose up -d db redis",
+                    "desc": "Start specific services only"
+                }
+            ],
+            "output": "$ docker compose up -d\nCreating network \"app_default\" with the default driver\nCreating app_db_1 ... done\nCreating app_api_1 ... done\nCreating app_web_1 ... done",
+            "mistakes": [
+                "Forgetting -d flag (blocks terminal)",
+                "Not rebuilding after Dockerfile changes",
+                "Running up without checking compose file"
+            ],
+            "realWorld": "Start full application stacks locally, orchestrate microservices, run integration tests.",
+            "practice": "Start a multi-service application with docker compose"
+        }
+    ],
+    "quiz": [
+        {
+            "question": "You want to run a container in the background. Which flag do you need?",
+            "options": [
+                "-b",
+                "-d",
+                "--background",
+                "-detach"
+            ],
+            "correct": 1,
+            "explanation": "The -d flag (detached mode) runs the container in the background."
+        }
+    ],
+    "project": {
+        "title": "Build & Deploy a Dockerized Web App",
+        "description": "Create a complete Docker workflow from Dockerfile to running container",
+        "steps": [
+            {
+                "cmd": "echo 'FROM nginx:alpine\nCOPY index.html /usr/share/nginx/html/' > Dockerfile",
+                "desc": "Create Dockerfile"
+            },
+            {
+                "cmd": "echo '<h1>DevOps Lab</h1>' > index.html",
+                "desc": "Create simple HTML"
+            },
+            {
+                "cmd": "docker build -t devops-web:v1 .",
+                "desc": "Build the image"
+            },
+            {
+                "cmd": "docker run -d -p 8080:80 --name web devops-web:v1",
+                "desc": "Run container"
+            },
+            {
+                "cmd": "docker ps",
+                "desc": "Verify container is running"
+            }
+        ]
+    }
+}

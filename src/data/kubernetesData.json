@@ -1,0 +1,430 @@
+{
+    "name": "Kubernetes",
+    "icon": "☸️",
+    "color": "from-indigo-500 to-blue-500",
+    "commands": [
+        {
+            "id": "kubectl-get",
+            "name": "kubectl get",
+            "category": "Resource Viewing",
+            "what": "Lists one or more Kubernetes resources",
+            "why": "View the current state of your cluster resources",
+            "when": "Checking deployment status, debugging, monitoring",
+            "syntax": "kubectl get <resource> [name] [flags]",
+            "examples": [
+                {
+                    "cmd": "kubectl get pods",
+                    "desc": "List all pods in current namespace"
+                },
+                {
+                    "cmd": "kubectl get pods -A",
+                    "desc": "List pods in all namespaces"
+                },
+                {
+                    "cmd": "kubectl get svc,deploy",
+                    "desc": "List services and deployments"
+                },
+                {
+                    "cmd": "kubectl get pods -o wide",
+                    "desc": "Show more details including node"
+                }
+            ],
+            "output": "NAME                     READY   STATUS    RESTARTS   AGE\nnginx-6799fc88d8-abc12   1/1     Running   0          2h\napi-server-7b8c9d-def34  1/1     Running   1          5h",
+            "mistakes": [
+                "Not specifying namespace (-n)",
+                "Forgetting -o wide for more details",
+                "Not using -w flag for watching changes"
+            ],
+            "realWorld": "Monitor deployments, check pod health, verify services are running.",
+            "practice": "List all pods with their node assignments and IP addresses"
+        },
+        {
+            "id": "kubectl-apply",
+            "name": "kubectl apply",
+            "category": "Resource Management",
+            "what": "Applies a configuration to a resource from a file",
+            "why": "Deploy and update applications declaratively",
+            "when": "Deploying new applications or updating existing ones",
+            "syntax": "kubectl apply -f <filename>",
+            "examples": [
+                {
+                    "cmd": "kubectl apply -f deployment.yaml",
+                    "desc": "Apply single file"
+                },
+                {
+                    "cmd": "kubectl apply -f ./manifests/",
+                    "desc": "Apply all files in directory"
+                },
+                {
+                    "cmd": "kubectl apply -f https://example.com/manifest.yaml",
+                    "desc": "Apply from URL"
+                }
+            ],
+            "output": "deployment.apps/nginx created\nservice/nginx-service created",
+            "mistakes": [
+                "Using create instead of apply (not idempotent)",
+                "Applying to wrong namespace",
+                "Not validating YAML before applying"
+            ],
+            "realWorld": "Deploy applications using GitOps workflows, apply infrastructure changes.",
+            "practice": "Create a deployment YAML and apply it to your cluster"
+        },
+        {
+            "id": "kubectl-describe",
+            "name": "kubectl describe",
+            "category": "Debugging",
+            "what": "Shows detailed information about a resource",
+            "why": "Debug issues, understand resource configuration and events",
+            "when": "Troubleshooting pod failures, checking events, understanding state",
+            "syntax": "kubectl describe <resource> <name>",
+            "examples": [
+                {
+                    "cmd": "kubectl describe pod nginx-abc12",
+                    "desc": "Describe specific pod"
+                },
+                {
+                    "cmd": "kubectl describe node worker-1",
+                    "desc": "Describe node"
+                },
+                {
+                    "cmd": "kubectl describe svc nginx-service",
+                    "desc": "Describe service"
+                }
+            ],
+            "output": "Name:         nginx-abc12\nNamespace:    default\nStatus:       Running\nIP:           10.244.1.5\nEvents:\n  Normal  Scheduled  2m   default-scheduler  Successfully assigned...",
+            "mistakes": [
+                "Not checking Events section for errors",
+                "Describing wrong resource type",
+                "Not specifying namespace for namespaced resources"
+            ],
+            "realWorld": "Debug why pods are failing, check resource allocation, view events.",
+            "practice": "Describe a pod and check its events section"
+        },
+        {
+            "id": "kubectl-logs",
+            "name": "kubectl logs",
+            "category": "Debugging",
+            "what": "Print the logs from a container in a pod",
+            "why": "Debug application issues, monitor output",
+            "when": "Application errors, debugging, monitoring startup",
+            "syntax": "kubectl logs <pod-name> [options]",
+            "examples": [
+                {
+                    "cmd": "kubectl logs nginx-abc12",
+                    "desc": "Get logs from pod"
+                },
+                {
+                    "cmd": "kubectl logs -f nginx-abc12",
+                    "desc": "Follow logs in real-time"
+                },
+                {
+                    "cmd": "kubectl logs nginx-abc12 -c nginx",
+                    "desc": "Logs from specific container"
+                },
+                {
+                    "cmd": "kubectl logs --previous nginx-abc12",
+                    "desc": "Logs from previous container"
+                }
+            ],
+            "output": "2024-12-15 10:30:00 [info] Server started\n2024-12-15 10:30:05 [info] Connected to database\n2024-12-15 10:30:10 [error] Connection timeout",
+            "mistakes": [
+                "Not using -f for real-time debugging",
+                "Forgetting --previous for crashed containers",
+                "Not specifying container in multi-container pods"
+            ],
+            "realWorld": "Debug production issues, monitor application startup, check error logs.",
+            "practice": "View real-time logs from a running pod"
+        },
+        {
+            "id": "kubectl-exec",
+            "name": "kubectl exec",
+            "category": "Debugging",
+            "what": "Execute a command in a container",
+            "why": "Debug, inspect, or troubleshoot from inside the container",
+            "when": "Need to run commands inside pod, debugging",
+            "syntax": "kubectl exec <pod> -- <command>",
+            "examples": [
+                {
+                    "cmd": "kubectl exec -it nginx-abc12 -- bash",
+                    "desc": "Open interactive shell"
+                },
+                {
+                    "cmd": "kubectl exec nginx-abc12 -- cat /etc/nginx/nginx.conf",
+                    "desc": "View config"
+                },
+                {
+                    "cmd": "kubectl exec nginx-abc12 -- curl localhost:80",
+                    "desc": "Test connectivity"
+                }
+            ],
+            "output": "$ kubectl exec -it nginx-abc12 -- bash\nroot@nginx-abc12:/#",
+            "mistakes": [
+                "Forgetting -- before the command",
+                "Not using -it for interactive sessions",
+                "Modifying container state permanently"
+            ],
+            "realWorld": "Debug production pods, test connectivity, inspect files.",
+            "practice": "Open a shell in a running pod"
+        },
+        {
+            "id": "kubectl-delete",
+            "name": "kubectl delete",
+            "category": "Resource Management",
+            "what": "Delete resources by name, label, or file",
+            "why": "Remove unwanted resources, clean up",
+            "when": "Removing old deployments, cleaning up, teardown",
+            "syntax": "kubectl delete <resource> <name>",
+            "examples": [
+                {
+                    "cmd": "kubectl delete pod nginx-abc12",
+                    "desc": "Delete specific pod"
+                },
+                {
+                    "cmd": "kubectl delete -f deployment.yaml",
+                    "desc": "Delete resources from file"
+                },
+                {
+                    "cmd": "kubectl delete pods -l app=nginx",
+                    "desc": "Delete by label"
+                }
+            ],
+            "output": "pod \"nginx-abc12\" deleted",
+            "mistakes": [
+                "Deleting in wrong namespace",
+                "Not using labels for bulk delete",
+                "Forgetting --grace-period=0 for immediate deletion"
+            ],
+            "realWorld": "Remove failed deployments, clean up test resources, restart pods.",
+            "practice": "Delete a pod and watch it get recreated by deployment"
+        },
+        {
+            "id": "kubectl-scale",
+            "name": "kubectl scale",
+            "category": "Scaling",
+            "what": "Change the number of replicas for a resource",
+            "why": "Scale applications up or down based on demand",
+            "when": "Handling load, scaling down for maintenance",
+            "syntax": "kubectl scale <resource> <name> --replicas=<count>",
+            "examples": [
+                {
+                    "cmd": "kubectl scale deployment nginx --replicas=5",
+                    "desc": "Scale to 5 replicas"
+                },
+                {
+                    "cmd": "kubectl scale deployment nginx --replicas=0",
+                    "desc": "Scale down to 0"
+                },
+                {
+                    "cmd": "kubectl scale deployment --all --replicas=2",
+                    "desc": "Scale all deployments"
+                }
+            ],
+            "output": "deployment.apps/nginx scaled",
+            "mistakes": [
+                "Scaling stateful applications without consideration",
+                "Not checking current replicas first",
+                "Scaling to 0 accidentally in production"
+            ],
+            "realWorld": "Handle traffic spikes, reduce costs during off-hours, maintenance.",
+            "practice": "Scale a deployment up and down"
+        },
+        {
+            "id": "kubectl-rollout",
+            "name": "kubectl rollout",
+            "category": "Deployments",
+            "what": "Manage rollouts of deployments",
+            "why": "Control deployments, rollback changes, check status",
+            "when": "Deploying updates, rolling back issues",
+            "syntax": "kubectl rollout <command> <resource>",
+            "examples": [
+                {
+                    "cmd": "kubectl rollout status deployment/nginx",
+                    "desc": "Check rollout status"
+                },
+                {
+                    "cmd": "kubectl rollout undo deployment/nginx",
+                    "desc": "Rollback to previous"
+                },
+                {
+                    "cmd": "kubectl rollout history deployment/nginx",
+                    "desc": "View rollout history"
+                },
+                {
+                    "cmd": "kubectl rollout restart deployment/nginx",
+                    "desc": "Restart deployment"
+                }
+            ],
+            "output": "$ kubectl rollout status deployment/nginx\ndeployment \"nginx\" successfully rolled out",
+            "mistakes": [
+                "Not checking status after deployment",
+                "Rolling back without knowing the issue",
+                "Not using --revision for specific rollback"
+            ],
+            "realWorld": "Deploy new versions safely, rollback broken releases, restart pods.",
+            "practice": "Deploy an update and then rollback"
+        },
+        {
+            "id": "kubectl-port-forward",
+            "name": "kubectl port-forward",
+            "category": "Networking",
+            "what": "Forward local ports to a pod",
+            "why": "Access cluster services locally for debugging",
+            "when": "Testing, debugging, local development",
+            "syntax": "kubectl port-forward <pod> <local>:<remote>",
+            "examples": [
+                {
+                    "cmd": "kubectl port-forward pod/nginx 8080:80",
+                    "desc": "Forward to pod"
+                },
+                {
+                    "cmd": "kubectl port-forward svc/api 3000:80",
+                    "desc": "Forward to service"
+                },
+                {
+                    "cmd": "kubectl port-forward deploy/nginx 8080:80",
+                    "desc": "Forward to deployment"
+                }
+            ],
+            "output": "Forwarding from 127.0.0.1:8080 -> 80\nForwarding from [::1]:8080 -> 80",
+            "mistakes": [
+                "Forgetting it only works while command runs",
+                "Port conflicts with local services",
+                "Not using service for load balancing"
+            ],
+            "realWorld": "Debug services locally, test before exposing, develop against cluster.",
+            "practice": "Port-forward a service to access it locally"
+        },
+        {
+            "id": "kubectl-create-namespace",
+            "name": "kubectl create namespace",
+            "category": "Organization",
+            "what": "Creates a new namespace",
+            "why": "Organize resources, isolate environments",
+            "when": "Setting up new environments, organizing projects",
+            "syntax": "kubectl create namespace <name>",
+            "examples": [
+                {
+                    "cmd": "kubectl create namespace production",
+                    "desc": "Create namespace"
+                },
+                {
+                    "cmd": "kubectl create ns staging",
+                    "desc": "Create using short form"
+                }
+            ],
+            "output": "namespace/production created",
+            "mistakes": [
+                "Not cleaning up unused namespaces",
+                "Using default namespace for everything",
+                "Inconsistent naming conventions"
+            ],
+            "realWorld": "Separate dev/staging/prod, isolate teams, organize microservices.",
+            "practice": "Create a namespace for your development environment"
+        },
+        {
+            "id": "kubectl-config",
+            "name": "kubectl config",
+            "category": "Configuration",
+            "what": "Manage kubeconfig settings",
+            "why": "Switch between clusters and contexts",
+            "when": "Working with multiple clusters, changing environments",
+            "syntax": "kubectl config <command>",
+            "examples": [
+                {
+                    "cmd": "kubectl config get-contexts",
+                    "desc": "List all contexts"
+                },
+                {
+                    "cmd": "kubectl config use-context production",
+                    "desc": "Switch context"
+                },
+                {
+                    "cmd": "kubectl config current-context",
+                    "desc": "Show current context"
+                },
+                {
+                    "cmd": "kubectl config set-context --current --namespace=dev",
+                    "desc": "Set default namespace"
+                }
+            ],
+            "output": "$ kubectl config get-contexts\nCURRENT   NAME         CLUSTER      NAMESPACE\n*         dev-cluster  dev          default\n          prod         production   default",
+            "mistakes": [
+                "Executing commands in wrong context",
+                "Not verifying context before changes",
+                "Hardcoding contexts in scripts"
+            ],
+            "realWorld": "Switch between dev/staging/prod clusters, manage access.",
+            "practice": "List contexts and switch to a different one"
+        },
+        {
+            "id": "kubectl-top",
+            "name": "kubectl top",
+            "category": "Monitoring",
+            "what": "Display resource usage (CPU/memory)",
+            "why": "Monitor cluster health, identify resource problems",
+            "when": "Troubleshooting, capacity planning, monitoring",
+            "syntax": "kubectl top <nodes|pods>",
+            "examples": [
+                {
+                    "cmd": "kubectl top nodes",
+                    "desc": "Show node resource usage"
+                },
+                {
+                    "cmd": "kubectl top pods",
+                    "desc": "Show pod resource usage"
+                },
+                {
+                    "cmd": "kubectl top pods --containers",
+                    "desc": "Show container-level usage"
+                }
+            ],
+            "output": "NAME       CPU(cores)   MEMORY(bytes)\nworker-1   250m         1024Mi\nworker-2   180m         768Mi",
+            "mistakes": [
+                "Not having metrics-server installed",
+                "Ignoring high resource usage",
+                "Not monitoring regularly"
+            ],
+            "realWorld": "Monitor cluster health, debug OOM issues, capacity planning.",
+            "practice": "Check resource usage of nodes and pods"
+        }
+    ],
+    "quiz": [
+        {
+            "question": "What flag shows pods from all namespaces?",
+            "options": [
+                "-n all",
+                "--all-namespaces or -A",
+                "--namespace=*",
+                "-all"
+            ],
+            "correct": 1,
+            "explanation": "Use --all-namespaces or its shorthand -A to see resources across all namespaces."
+        }
+    ],
+    "project": {
+        "title": "Deploy an Application to Kubernetes",
+        "description": "Practice deploying and managing a simple application",
+        "steps": [
+            {
+                "cmd": "kubectl create namespace devops-lab",
+                "desc": "Create namespace"
+            },
+            {
+                "cmd": "kubectl apply -f deployment.yaml -n devops-lab",
+                "desc": "Deploy application"
+            },
+            {
+                "cmd": "kubectl get pods -n devops-lab -w",
+                "desc": "Watch pods come up"
+            },
+            {
+                "cmd": "kubectl expose deployment nginx --port=80 -n devops-lab",
+                "desc": "Expose service"
+            },
+            {
+                "cmd": "kubectl get svc -n devops-lab",
+                "desc": "Verify service"
+            }
+        ]
+    }
+}

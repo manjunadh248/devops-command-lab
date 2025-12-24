@@ -1,0 +1,426 @@
+{
+    "name": "Git",
+    "icon": "📦",
+    "color": "from-orange-500 to-red-500",
+    "commands": [
+        {
+            "id": "git-init",
+            "name": "git init",
+            "category": "Repository Setup",
+            "what": "Initializes a new Git repository in the current directory",
+            "why": "Start version control for your project to track changes",
+            "when": "Beginning a new project or adding version control to existing code",
+            "syntax": "git init",
+            "examples": [
+                {
+                    "cmd": "git init",
+                    "desc": "Initialize repository in current directory"
+                },
+                {
+                    "cmd": "git init my-project",
+                    "desc": "Create new directory with initialized repo"
+                }
+            ],
+            "output": "Initialized empty Git repository in /home/user/project/.git/",
+            "mistakes": [
+                "Initializing inside another git repository",
+                "Forgetting to create .gitignore first",
+                "Not setting up user name and email first"
+            ],
+            "realWorld": "Every DevOps project starts with git init - infrastructure as code, CI/CD configurations, and application source.",
+            "practice": "Initialize a new repository for a DevOps scripts collection"
+        },
+        {
+            "id": "git-clone",
+            "name": "git clone",
+            "category": "Repository Setup",
+            "what": "Creates a copy of a remote repository on your local machine",
+            "why": "Get a complete copy of a project including all history",
+            "when": "Starting work on an existing project or contributing to open source",
+            "syntax": "git clone <repository-url> [directory]",
+            "examples": [
+                {
+                    "cmd": "git clone https://github.com/user/repo.git",
+                    "desc": "Clone using HTTPS"
+                },
+                {
+                    "cmd": "git clone git@github.com:user/repo.git",
+                    "desc": "Clone using SSH"
+                },
+                {
+                    "cmd": "git clone --depth 1 https://github.com/user/repo.git",
+                    "desc": "Shallow clone (faster)"
+                }
+            ],
+            "output": "Cloning into 'repo'...\nremote: Enumerating objects: 156, done.\nReceiving objects: 100% (156/156), 45.23 KiB, done.",
+            "mistakes": [
+                "Cloning into wrong directory",
+                "Not having SSH keys set up for private repos",
+                "Cloning large repos without --depth flag"
+            ],
+            "realWorld": "Clone infrastructure repos, CI/CD templates, and team codebases to start contributing.",
+            "practice": "Clone a public GitHub repository to your local machine"
+        },
+        {
+            "id": "git-add",
+            "name": "git add",
+            "category": "Staging",
+            "what": "Adds file changes to the staging area",
+            "why": "Prepare changes to be included in the next commit",
+            "when": "After modifying files, before committing changes",
+            "syntax": "git add [file...]",
+            "examples": [
+                {
+                    "cmd": "git add .",
+                    "desc": "Stage all changes in current directory"
+                },
+                {
+                    "cmd": "git add src/",
+                    "desc": "Stage all changes in src directory"
+                },
+                {
+                    "cmd": "git add -p",
+                    "desc": "Interactively stage changes"
+                }
+            ],
+            "output": "$ git add .\n$ git status\nChanges to be committed:\n  new file:   app.js\n  modified:   config.json",
+            "mistakes": [
+                "Using 'git add .' without checking what's staged",
+                "Adding files that should be in .gitignore",
+                "Not using -p for partial staging"
+            ],
+            "realWorld": "Stage specific files for atomic commits, prepare deployment changes.",
+            "practice": "Stage specific files for a commit"
+        },
+        {
+            "id": "git-commit",
+            "name": "git commit",
+            "category": "Commits",
+            "what": "Records staged changes to the repository",
+            "why": "Create a permanent snapshot of your changes with a message",
+            "when": "After staging changes, when a logical unit of work is complete",
+            "syntax": "git commit -m \"message\"",
+            "examples": [
+                {
+                    "cmd": "git commit -m 'Add user authentication'",
+                    "desc": "Commit with message"
+                },
+                {
+                    "cmd": "git commit -am 'Fix typo'",
+                    "desc": "Stage and commit all tracked files"
+                },
+                {
+                    "cmd": "git commit --amend",
+                    "desc": "Modify the last commit"
+                }
+            ],
+            "output": "[main abc1234] Add user authentication\n 3 files changed, 150 insertions(+), 20 deletions(-)",
+            "mistakes": [
+                "Writing vague commit messages like 'fix'",
+                "Committing too many unrelated changes together",
+                "Forgetting to stage changes before committing"
+            ],
+            "realWorld": "Create atomic commits for features, document changes for team collaboration.",
+            "practice": "Make a commit with a descriptive message"
+        },
+        {
+            "id": "git-push",
+            "name": "git push",
+            "category": "Remote Operations",
+            "what": "Uploads local commits to a remote repository",
+            "why": "Share your changes with the team, backup to remote",
+            "when": "After committing changes you want to share",
+            "syntax": "git push [remote] [branch]",
+            "examples": [
+                {
+                    "cmd": "git push origin main",
+                    "desc": "Push to main branch"
+                },
+                {
+                    "cmd": "git push -u origin feature-branch",
+                    "desc": "Push and set upstream"
+                },
+                {
+                    "cmd": "git push --force-with-lease",
+                    "desc": "Safe force push"
+                }
+            ],
+            "output": "Enumerating objects: 5, done.\nWriting objects: 100% (3/3), 512 bytes, done.\nTo github.com:user/repo.git\n   abc123..def456  main -> main",
+            "mistakes": [
+                "Using --force without --with-lease",
+                "Pushing to wrong branch",
+                "Not pulling before pushing"
+            ],
+            "realWorld": "Deploy changes to shared repos, trigger CI/CD pipelines, backup code.",
+            "practice": "Push your local commits to a remote repository"
+        },
+        {
+            "id": "git-pull",
+            "name": "git pull",
+            "category": "Remote Operations",
+            "what": "Downloads and integrates remote changes into your local branch",
+            "why": "Get the latest changes from your team",
+            "when": "Before starting work, before pushing, regularly to stay updated",
+            "syntax": "git pull [remote] [branch]",
+            "examples": [
+                {
+                    "cmd": "git pull",
+                    "desc": "Pull from tracked remote"
+                },
+                {
+                    "cmd": "git pull origin main",
+                    "desc": "Pull specific branch"
+                },
+                {
+                    "cmd": "git pull --rebase",
+                    "desc": "Pull with rebase instead of merge"
+                }
+            ],
+            "output": "remote: Enumerating objects: 5, done.\nFrom github.com:user/repo\n * branch main -> FETCH_HEAD\nUpdating abc123..def456\nFast-forward\n app.js | 10 ++++++++++",
+            "mistakes": [
+                "Not pulling before starting new work",
+                "Pulling without committing local changes first",
+                "Not resolving merge conflicts properly"
+            ],
+            "realWorld": "Stay synced with team changes, get latest features and fixes.",
+            "practice": "Pull the latest changes from your remote repository"
+        },
+        {
+            "id": "git-branch",
+            "name": "git branch",
+            "category": "Branching",
+            "what": "Lists, creates, or deletes branches",
+            "why": "Manage parallel development streams, organize features",
+            "when": "Starting new features, organizing work, cleaning up",
+            "syntax": "git branch [options] [branch-name]",
+            "examples": [
+                {
+                    "cmd": "git branch",
+                    "desc": "List local branches"
+                },
+                {
+                    "cmd": "git branch feature-login",
+                    "desc": "Create new branch"
+                },
+                {
+                    "cmd": "git branch -d feature-login",
+                    "desc": "Delete merged branch"
+                },
+                {
+                    "cmd": "git branch -a",
+                    "desc": "List all branches including remote"
+                }
+            ],
+            "output": "$ git branch\n  feature-auth\n* main\n  feature-ui",
+            "mistakes": [
+                "Working directly on main branch",
+                "Not deleting merged branches",
+                "Creating branches from wrong base"
+            ],
+            "realWorld": "Create feature branches, manage release branches, organize team work.",
+            "practice": "Create a new feature branch from main"
+        },
+        {
+            "id": "git-checkout",
+            "name": "git checkout",
+            "category": "Branching",
+            "what": "Switches branches or restores files",
+            "why": "Navigate between branches, undo file changes",
+            "when": "Starting work on different feature, restoring files",
+            "syntax": "git checkout [branch|file]",
+            "examples": [
+                {
+                    "cmd": "git checkout main",
+                    "desc": "Switch to main branch"
+                },
+                {
+                    "cmd": "git checkout -b feature-new",
+                    "desc": "Create and switch to new branch"
+                },
+                {
+                    "cmd": "git checkout -- file.js",
+                    "desc": "Discard changes to file"
+                }
+            ],
+            "output": "$ git checkout -b feature-login\nSwitched to a new branch 'feature-login'",
+            "mistakes": [
+                "Checking out with uncommitted changes",
+                "Confusing checkout with reset",
+                "Losing changes by checking out files"
+            ],
+            "realWorld": "Switch between features, restore accidentally modified files.",
+            "practice": "Create and switch to a new feature branch"
+        },
+        {
+            "id": "git-merge",
+            "name": "git merge",
+            "category": "Branching",
+            "what": "Combines branches together",
+            "why": "Integrate completed features into main branch",
+            "when": "After feature is complete, during releases",
+            "syntax": "git merge [branch]",
+            "examples": [
+                {
+                    "cmd": "git merge feature-login",
+                    "desc": "Merge feature into current branch"
+                },
+                {
+                    "cmd": "git merge --no-ff feature-login",
+                    "desc": "Merge with commit even if fast-forward"
+                },
+                {
+                    "cmd": "git merge --squash feature-login",
+                    "desc": "Squash all commits into one"
+                }
+            ],
+            "output": "$ git merge feature-login\nUpdating abc123..def456\nFast-forward\n auth.js | 50 +++++++++++\n 1 file changed, 50 insertions(+)",
+            "mistakes": [
+                "Merging without testing",
+                "Not resolving conflicts properly",
+                "Merging wrong branch"
+            ],
+            "realWorld": "Integrate feature branches, combine release branches, sync with main.",
+            "practice": "Merge a feature branch into main"
+        },
+        {
+            "id": "git-status",
+            "name": "git status",
+            "category": "Information",
+            "what": "Shows the working tree status",
+            "why": "See what files have changed, what's staged, what's untracked",
+            "when": "Before committing, to understand current state",
+            "syntax": "git status [options]",
+            "examples": [
+                {
+                    "cmd": "git status",
+                    "desc": "Show full status"
+                },
+                {
+                    "cmd": "git status -s",
+                    "desc": "Short format"
+                },
+                {
+                    "cmd": "git status -b",
+                    "desc": "Show branch info"
+                }
+            ],
+            "output": "On branch main\nChanges to be committed:\n  new file: feature.js\n\nChanges not staged for commit:\n  modified: app.js",
+            "mistakes": [
+                "Not checking status before committing",
+                "Ignoring untracked files",
+                "Not understanding staged vs unstaged"
+            ],
+            "realWorld": "Verify what will be committed, check for forgotten files.",
+            "practice": "Check the status of your repository"
+        },
+        {
+            "id": "git-log",
+            "name": "git log",
+            "category": "Information",
+            "what": "Shows commit history",
+            "why": "Review changes, find commits, understand project history",
+            "when": "Debugging, reviewing changes, finding specific commits",
+            "syntax": "git log [options]",
+            "examples": [
+                {
+                    "cmd": "git log --oneline",
+                    "desc": "Compact view"
+                },
+                {
+                    "cmd": "git log -5",
+                    "desc": "Show last 5 commits"
+                },
+                {
+                    "cmd": "git log --graph --oneline",
+                    "desc": "Show branch graph"
+                },
+                {
+                    "cmd": "git log --author='John'",
+                    "desc": "Filter by author"
+                }
+            ],
+            "output": "$ git log --oneline -3\nabc1234 Add user authentication\ndef5678 Update dependencies\nghi9012 Initial commit",
+            "mistakes": [
+                "Not using --oneline for readability",
+                "Searching entire history when limits would help",
+                "Not using --graph for branch visualization"
+            ],
+            "realWorld": "Review deployment history, find when bugs were introduced, audit changes.",
+            "practice": "View the last 10 commits in compact format"
+        },
+        {
+            "id": "git-stash",
+            "name": "git stash",
+            "category": "Utilities",
+            "what": "Temporarily stores uncommitted changes",
+            "why": "Save work in progress to switch contexts quickly",
+            "when": "Need to switch branches but have uncommitted work",
+            "syntax": "git stash [command]",
+            "examples": [
+                {
+                    "cmd": "git stash",
+                    "desc": "Stash current changes"
+                },
+                {
+                    "cmd": "git stash pop",
+                    "desc": "Apply and remove last stash"
+                },
+                {
+                    "cmd": "git stash list",
+                    "desc": "List all stashes"
+                },
+                {
+                    "cmd": "git stash apply stash@{0}",
+                    "desc": "Apply specific stash"
+                }
+            ],
+            "output": "$ git stash\nSaved working directory and index state WIP on main: abc1234 Last commit message",
+            "mistakes": [
+                "Forgetting about stashed changes",
+                "Stashing without a descriptive message",
+                "Not cleaning up old stashes"
+            ],
+            "realWorld": "Quickly switch to fix urgent bugs, save incomplete work.",
+            "practice": "Stash your current changes and then restore them"
+        }
+    ],
+    "quiz": [
+        {
+            "question": "What's the difference between git init and git clone?",
+            "options": [
+                "No difference, they do the same thing",
+                "init creates new repo, clone copies existing remote repo",
+                "clone is for public repos, init is for private",
+                "init is deprecated, use clone instead"
+            ],
+            "correct": 1,
+            "explanation": "git init creates a new empty repository, while git clone copies an existing remote repository with all its history."
+        }
+    ],
+    "project": {
+        "title": "Git Workflow Basics",
+        "description": "Practice the fundamental Git workflow",
+        "steps": [
+            {
+                "cmd": "git init devops-scripts",
+                "desc": "Create a new repository"
+            },
+            {
+                "cmd": "cd devops-scripts",
+                "desc": "Enter the repository"
+            },
+            {
+                "cmd": "echo '#!/bin/bash' > deploy.sh",
+                "desc": "Create a script file"
+            },
+            {
+                "cmd": "git add deploy.sh",
+                "desc": "Stage the file"
+            },
+            {
+                "cmd": "git commit -m 'Initial commit'",
+                "desc": "Create first commit"
+            }
+        ]
+    }
+}
